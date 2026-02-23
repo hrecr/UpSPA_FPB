@@ -1,0 +1,73 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>UpSPA Options</title>
+    <style>
+      body { font-family: system-ui, sans-serif; margin: 16px; max-width: 880px; }
+      h2 { margin-top: 0; }
+      label { display: block; margin: 8px 0 4px; }
+      input, button, textarea { padding: 8px; width: 100%; box-sizing: border-box; }
+      .row { display: flex; gap: 8px; }
+      .row > * { flex: 1; }
+      .sp-row { display:flex; gap: 8px; margin: 6px 0; }
+      .sp-row input { flex: 1; }
+      .sp-row button { width: 80px; }
+      .small { font-size: 12px; opacity: 0.8; }
+      .ok { color: #0b6; }
+      .err { color: #b00020; }
+      hr { margin: 16px 0; }
+    </style>
+  </head>
+  <body>
+    <h2>UpSPA Options</h2>
+    <div class="small">
+      This is a project skeleton. Configure SP endpoints + threshold, then run Setup (Π1).
+    </div>
+
+    <label>
+      <input id="enabled" type="checkbox" /> Enabled
+    </label>
+
+    <label>UID (stable identifier used with SPs)</label>
+    <input id="uid" placeholder="alice@example.com" />
+
+    <label>Threshold t</label>
+    <input id="threshold" type="number" min="1" step="1" />
+
+    <label>Storage Providers</label>
+    <div id="spList"></div>
+    <button id="addSp" style="margin-top: 8px;">Add SP</button>
+
+    <hr />
+
+    <h3>Setup (Π1)</h3>
+    <div class="small">Run once per user to provision each SP with (sig_pk, cid, k_i).</div>
+    <label>Master password</label>
+    <input id="setupPassword" type="password" placeholder="Your master password" />
+    <button id="runSetup" style="margin-top: 8px;">Run Setup and provision SPs</button>
+
+    <hr />
+
+    <h3>Master Password Update (Π5)</h3>
+    <div class="small">Rotates TOPRF shares + re-encrypts cid under a new master password.</div>
+    <div class="row">
+      <div>
+        <label>Old master password</label>
+        <input id="oldPwd" type="password" />
+      </div>
+      <div>
+        <label>New master password</label>
+        <input id="newPwd" type="password" />
+      </div>
+    </div>
+    <button id="runPwdUpdate" style="margin-top: 8px;">Run Password Update</button>
+
+    <hr />
+
+    <div id="msg" class="small"></div>
+
+    <script type="module" src="./options.ts"></script>
+  </body>
+</html>

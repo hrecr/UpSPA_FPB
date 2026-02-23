@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>UpSPA</title>
+    <style>
+      body { font-family: system-ui, sans-serif; margin: 12px; width: 320px; }
+      code { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+      .row { margin: 8px 0; }
+      button { width: 100%; padding: 8px; }
+      .small { font-size: 12px; opacity: 0.8; }
+      .err { color: #b00020; }
+    </style>
+  </head>
+  <body>
+    <h3 style="margin:0 0 8px 0;">UpSPA</h3>
+
+    <div class="row small" id="site"></div>
+    <div class="row" id="status"></div>
+    <div class="row err" id="error"></div>
+
+    <div class="row">
+      <button id="openOptions">Open Options</button>
+    </div>
+
+    <script type="module" src="./popup.ts"></script>
+  </body>
+</html>
