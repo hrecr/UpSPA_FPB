@@ -1,0 +1,21 @@
+[package]
+name = "upspa-core"
+version = "0.1.0"
+edition = "2021"
+license = "Apache-2.0"
+description = "UpSPA client-side cryptographic core (Rust)"
+
+[dependencies]
+aead = "0.5"
+base64 = "0.21"
+blake3 = "1.5"
+serde-big-array = "0.5"
+chacha20poly1305 = "0.10.1"
+curve25519-dalek = { version = "4", features = ["rand_core"] }
+ed25519-dalek = { version = "2", features = ["rand_core"] }
+rand_core = "0.6"
+serde = { version = "1", features = ["derive"] }
+thiserror = "1"
+
+[dev-dependencies]
+rand_chacha = "0.3"

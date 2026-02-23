@@ -14,7 +14,7 @@ pub mod crypto {
         lagrange_coeffs_at_zero, random_scalar, toprf_client_eval, toprf_client_eval_from_partials,
         toprf_gen, ToprfClient, ToprfClientState, ToprfPartial,
     };
-    pub use crate::types::{CtBlob, CtBlobParseError, NONCE_LEN, TAG_LEN};
+    pub use crate::types::{CtBlob, NONCE_LEN, TAG_LEN, UpspaError};
 }
 
 pub use types::UpspaError;
