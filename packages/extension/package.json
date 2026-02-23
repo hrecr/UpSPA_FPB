@@ -1,0 +1,20 @@
+{
+  "name": "upspa-extension",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "echo 'add eslint if desired'"
+  },
+  "dependencies": {
+    "upspa-js": "workspace:*"
+  },
+  "devDependencies": {
+    "@crxjs/vite-plugin": "^2.0.0",
+    "@types/chrome": "^0.0.268",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.8"
+  }
+}
