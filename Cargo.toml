@@ -1,0 +1,7 @@
+[workspace]
+resolver = "2"
+members = [
+  "crates/upspa-core",
+  "crates/upspa-wasm",
+  "crates/upspa-cli",
+]
