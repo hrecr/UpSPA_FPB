@@ -1,0 +1,12 @@
+/target/
+**/target/
+
+node_modules/
+**/node_modules/
+
+dist/
+**/dist/
+
+packages/upspa-js/wasm-pkg/
+
+.DS_Store
