@@ -1,0 +1,3 @@
+-- TODO(UPSPA-SP): Implement this SQL file.
+-- - Read: docs/apis.md and docs/openapi/sp.yaml (wire contract)
+-- - Ensure schema supports setup + records + replay protection (last_pwd_update_time)
