@@ -32,8 +32,6 @@ export class UpspaClient {
     const clients = spClients ?? cfg.sps.map((d) => new HttpStorageProviderClient(d));
     assert(clients.length > 0, 'At least one SP is required');
     assert(cfg.threshold >= 1 && cfg.threshold <= clients.length, 'Invalid threshold');
-
-    // Ensure unique ids
     const ids = new Set<number>();
     for (const c of clients) {
       if (ids.has(c.id)) throw new Error(`Duplicate SP id: ${c.id}`);
@@ -202,7 +200,7 @@ export class UpspaClient {
       this.sps.length,
       this.threshold,
       newPassword,
-      timestamp,
+      BigInt(timestamp),
     ) as PasswordUpdateOut;
 
     const writes = await Promise.allSettled(

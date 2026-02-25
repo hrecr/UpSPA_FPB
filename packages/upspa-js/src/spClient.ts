@@ -39,6 +39,7 @@ async function fetchJson<T>(url: string, init: RequestInit, timeoutMs = 10_000):
       const body = await res.text().catch(() => '');
       throw new Error(`HTTP ${res.status} ${res.statusText} from ${url}: ${body}`);
     }
+
     const text = await res.text();
     if (!text) return undefined as unknown as T;
     return JSON.parse(text) as T;

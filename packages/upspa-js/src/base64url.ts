@@ -7,6 +7,7 @@ export function bytesToBase64Url(bytes: Uint8Array): string {
       .replace(/\//g, '_')
       .replace(/=+$/g, '');
   }
+
   let bin = '';
   for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
   const b64 = btoa(bin);
@@ -17,6 +18,7 @@ export function base64UrlToBytes(s: string): Uint8Array {
   const b64 = s.replace(/-/g, '+').replace(/_/g, '/');
   const padLen = (4 - (b64.length % 4)) % 4;
   const padded = b64 + '='.repeat(padLen);
+
   const g: any = globalThis as any;
   if (typeof g.Buffer !== 'undefined') {
     return new Uint8Array(g.Buffer.from(padded, 'base64'));
