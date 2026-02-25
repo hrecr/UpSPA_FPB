@@ -2,6 +2,7 @@ import { describe, expect, it, vi } from 'vitest';
 
 import type { StorageProviderClient } from '../src/spClient.js';
 import { UpspaClient } from '../src/upspaClient.js';
+
 vi.mock('../src/wasm.js', async () => {
   return {
     loadUpspaWasm: async () => ({
@@ -40,7 +41,6 @@ vi.mock('../src/wasm.js', async () => {
         ],
       }),
       protocol_auth_finish: () => ({ vinfo_prime: 'vinfo_prime', best_ctr: 0 }),
-
       protocol_secret_update_prepare: () => ({
         k0: 'k0',
         per_sp: [
@@ -55,7 +55,6 @@ vi.mock('../src/wasm.js', async () => {
         old_ctr: 0,
         new_ctr: 1,
       }),
-
       protocol_password_update: () => ({
         cid_new: { nonce: 'n3', ct: 'c3', tag: 't3' },
         per_sp: [
