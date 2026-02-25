@@ -1,7 +1,6 @@
 import type { BgRequest, BgResponse } from '../shared/messages';
 
 function debug(...args: unknown[]) {
-  // Toggle to true for verbose logs
   const enabled = false;
   if (enabled) console.log('[UpSPA]', ...args);
 }
@@ -37,14 +36,9 @@ async function handleFormSubmit(form: HTMLFormElement, ev: SubmitEvent): Promise
 
   const mode = classifyForm(pws);
   const lsj = window.location.origin;
-
-  // User provides master password by typing it into the first password field.
   const masterPassword = pws[0].value;
-  if (!masterPassword) return; // let the site handle empty
-
-  // Basic sanity for registration forms
+  if (!masterPassword) return; 
   if (mode === 'register' && pws[1].value !== masterPassword) {
-    // If user typed two different things, do not override.
     debug('register form: password fields mismatch; skipping UpSPA transform');
     return;
   }
@@ -71,9 +65,6 @@ async function handleFormSubmit(form: HTMLFormElement, ev: SubmitEvent): Promise
       form.submit();
       return;
     }
-
-    // change-password / Π4 secret update
-    // Heuristic: user types master password in the first (old password) field.
     const prep = await bg<BgResponse>({ type: 'UPSRA_SECRET_UPDATE_PREP', lsj, password: masterPassword });
     if (!prep.ok) throw new Error(prep.error);
 
@@ -83,19 +74,13 @@ async function handleFormSubmit(form: HTMLFormElement, ev: SubmitEvent): Promise
       cj_new: any;
       suids: Array<{ sp_id: number; suid: string }>;
     };
-
-    // Fill old/new/confirm with computed vInfos.
     pws[0].value = su.vinfo_prime_b64;
     if (pws.length >= 2) pws[1].value = su.vinfo_new_b64;
     if (pws.length >= 3) pws[2].value = su.vinfo_new_b64;
-    // If more password fields exist, fill them too.
     for (let i = 3; i < pws.length; i++) pws[i].value = su.vinfo_new_b64;
 
     markProcessed(form);
     form.submit();
-
-    // Best-effort commit: update SP records shortly after the form submission.
-    // In a production extension, you would detect success before committing.
     setTimeout(() => {
       bg<BgResponse>({ type: 'UPSRA_SECRET_UPDATE_COMMIT', suids: su.suids, cj_new: su.cj_new })
         .then((r) => {
@@ -105,8 +90,6 @@ async function handleFormSubmit(form: HTMLFormElement, ev: SubmitEvent): Promise
     }, 2000);
   } catch (e) {
     console.warn('[UpSPA] failed to transform password:', e);
-    // Fall back: let original submission proceed unchanged.
-    // But we already prevented default; resubmit without modifying.
     markProcessed(form);
     form.submit();
   }
@@ -118,15 +101,11 @@ function attachToForms(root: Document | ShadowRoot) {
     if ((f as any).__upspaBound) continue;
     (f as any).__upspaBound = true;
     f.addEventListener('submit', (ev) => {
-      // Fire-and-forget; handler prevents default if it takes over
       void handleFormSubmit(f, ev as SubmitEvent);
     });
   }
 }
 
-// Initial attach
 attachToForms(document);
-
-// Watch for dynamic SPA pages
 const mo = new MutationObserver(() => attachToForms(document));
 mo.observe(document.documentElement, { subtree: true, childList: true });

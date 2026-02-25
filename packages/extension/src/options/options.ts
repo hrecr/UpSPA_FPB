@@ -44,7 +44,6 @@ function renderSpList(sps: Array<{ id: number; baseUrl: string }>) {
       row.remove();
       await saveConfig();
     };
-    // autosave on change
     for (const inp of Array.from(row.querySelectorAll('input'))) {
       (inp as HTMLInputElement).addEventListener('change', () => void saveConfig());
     }
