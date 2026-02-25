@@ -20,6 +20,14 @@ case "$branch" in
     allowed+=("services/storage-provider-go/cmd/sp/")
     allowed+=("services/storage-provider-go/INTERN_NOTES/emirhan-")
     ;;
+  intern/extension)
+    allowed+=("packages/extension/")
+    allowed+=("packages/upspa-js/")
+    ;;
+  Feyza)
+    allowed+=("packages/extension/")
+    allowed+=("packages/upspa-js/")
+    ;;
   *)
     exit 0
     ;;
