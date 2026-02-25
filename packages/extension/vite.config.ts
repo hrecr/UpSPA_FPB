@@ -1,10 +1,15 @@
-import { defineConfig } from 'vite';
-import { crx } from '@crxjs/vite-plugin';
-import manifest from './src/manifest';
+if (typeof (globalThis as any).File === "undefined") {
+  (globalThis as any).File = class File {};
+}
+
+const { defineConfig } = await import("vite");
+const { crx } = await import("@crxjs/vite-plugin");
+const { default: wasm } = await import("vite-plugin-wasm");
+const manifest = (await import("./src/manifest")).default;
 
 export default defineConfig({
-  plugins: [crx({ manifest })],
+  plugins: [wasm(), crx({ manifest })],
   build: {
-    sourcemap: true,
+    target: "es2022",
   },
 });

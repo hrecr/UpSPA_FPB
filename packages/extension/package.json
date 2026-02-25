@@ -9,12 +9,13 @@
     "lint": "echo 'add eslint if desired'"
   },
   "dependencies": {
-    "upspa-js": "workspace:*"
+    "upspa-js": "file:../upspa-js"
   },
   "devDependencies": {
     "@crxjs/vite-plugin": "^2.0.0",
     "@types/chrome": "^0.0.268",
     "typescript": "^5.6.3",
-    "vite": "^5.4.8"
+    "vite": "^5.4.8",
+    "vite-plugin-wasm": "^3.5.0"
   }
 }
