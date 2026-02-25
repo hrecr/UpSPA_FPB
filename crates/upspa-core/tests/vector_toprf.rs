@@ -72,6 +72,7 @@ fn toprf_threshold_reconstruction_matches_master() -> Result<(), UpspaError> {
         "threshold reconstruction in exponent must match direct master evaluation"
     );
 
+    // Finalize must match too
     let key1 = oprf_finalize(pw, &y_reconstructed);
     let key2 = oprf_finalize(pw, &y_direct);
     assert_eq!(key1, key2);
@@ -90,6 +91,7 @@ fn toprf_reconstruction_fails_with_t_minus_1_shares() -> Result<(), UpspaError> 
     let mut rng = rng_from_seed(0x99);
     let (k_master, shares) = toprf_gen(nsp, tsp, &mut rng);
 
+    // Only t-1 shares
     let take = tsp - 1;
 
     let mut xs: Vec<Scalar> = Vec::with_capacity(take);

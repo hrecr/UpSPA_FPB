@@ -161,8 +161,8 @@ pub fn point_from_bytes(bytes: &[u8; 32]) -> Result<RistrettoPoint, UpspaError> 
 }
 
 pub fn scalar_from_canonical_bytes(bytes: &[u8; 32]) -> Result<Scalar, UpspaError> {
-    Scalar::from_canonical_bytes(*bytes).ok_or(UpspaError::InvalidScalar)
-}
+    Option::<Scalar>::from(Scalar::from_canonical_bytes(*bytes))
+    .ok_or(UpspaError::InvalidScalar)}
 
 pub fn toprf_server_eval(
     blinded: &[u8; 32],

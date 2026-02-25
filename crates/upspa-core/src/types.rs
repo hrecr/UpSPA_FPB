@@ -13,21 +13,17 @@ pub struct CtBlobB64 {
     pub tag: String,
 }
 
-/// Parse errors for CtBlob binary encodings.
 #[derive(Clone, Debug, thiserror::Error, PartialEq, Eq)]
 pub enum CtBlobParseError {
     #[error("invalid length: expected {expected}, got {got}")]
     InvalidLength { expected: usize, got: usize },
 }
 
-/// Canonical AEAD blob format used across the project:
-/// nonce (24) || ct (PT_LEN) || tag (16)
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub struct CtBlob<const PT_LEN: usize> {
     #[serde(with = "serde_big_array::BigArray")]
     pub nonce: [u8; NONCE_LEN],
 
-    // const-generic array => needs serde-big-array
     #[serde(with = "serde_big_array::BigArray")]
     pub ct: [u8; PT_LEN],
 
@@ -38,8 +34,6 @@ pub struct CtBlob<const PT_LEN: usize> {
 impl<const PT_LEN: usize> CtBlob<PT_LEN> {
     pub const WIRE_LEN: usize = NONCE_LEN + PT_LEN + TAG_LEN;
 
-    /// Stable-on-Rust: return a Vec instead of `[u8; NONCE_LEN + PT_LEN + TAG_LEN]`
-    /// (avoids const-generic const-eval limitations).
     pub fn to_vec(&self) -> Vec<u8> {
         let mut v = Vec::with_capacity(Self::WIRE_LEN);
         v.extend_from_slice(&self.nonce);
@@ -83,7 +77,6 @@ impl<const PT_LEN: usize> CtBlob<PT_LEN> {
     }
 }
 
-/// Unified crate error type (keep variants that other modules use).
 #[derive(Clone, Debug, thiserror::Error)]
 pub enum UpspaError {
     #[error("invalid length: expected {expected}, got {got}")]
@@ -107,8 +100,6 @@ pub enum UpspaError {
     #[error("ct blob parse error")]
     CtParse,
 }
-
-// -------------------- base64url helpers --------------------
 
 pub fn b64_encode(bytes: &[u8]) -> String {
     URL_SAFE_NO_PAD.encode(bytes)
