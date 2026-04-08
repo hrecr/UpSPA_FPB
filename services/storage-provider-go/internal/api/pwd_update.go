@@ -3,6 +3,7 @@ package api
 import (
 	"encoding/base64"
 	"net/http"
+	"upspa/internal/crypto"
 	"upspa/internal/model"
 )
 
@@ -66,9 +67,21 @@ func (h *Handler) PasswordUpdate(w http.ResponseWriter, r *http.Request) {
 	sigPkBytes, _ := base64.RawURLEncoding.DecodeString(sigPkB64)
 	sigBytes, _ := base64.RawURLEncoding.DecodeString(req.SigB64)
 	
-	// Create mock msg for now. In real integration, we'd rebuild exactly per protocol-phases.md
-	msgBytes := []byte("mock_signature_message_payload")
-	
+	cidNonceBytes, _ := base64.RawURLEncoding.DecodeString(req.CIDNew.Nonce)
+	cidCtBytes, _ := base64.RawURLEncoding.DecodeString(req.CIDNew.Ct)
+	cidTagBytes, _ := base64.RawURLEncoding.DecodeString(req.CIDNew.Tag)
+	kiNewBytes, _ := base64.RawURLEncoding.DecodeString(req.KINewB64)
+
+	// Rebuild signature message exactly per protocol-phases.md
+	msgBytes := crypto.BuildPwdUpdateSigMsg(
+		cidNonceBytes,
+		cidCtBytes,
+		cidTagBytes,
+		kiNewBytes,
+		req.Timestamp,
+		req.SpID,
+	)
+
 	if !h.crypto.VerifyEd25519(sigPkBytes, msgBytes, sigBytes) {
 		WriteError(w, http.StatusUnauthorized, "invalid_signature", "Ed25519 signature is invalid", nil)
 		return

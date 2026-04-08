@@ -4,7 +4,9 @@ import (
 	"encoding/base64"
 	"net/http"
 
-	"upspa/internal/model")
+	"upspa/internal/crypto"
+	"upspa/internal/model"
+)
 
 // EvalToprf handles POST /v1/toprf/eval
 func (h *Handler) EvalToprf(w http.ResponseWriter, r *http.Request) {
@@ -40,11 +42,17 @@ func (h *Handler) EvalToprf(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// (Mock) Cryptographic Evaluation
-	_ = kIB64 // mock usage
-	
-	// Create a dummy 32-byte point for tests
-	yB64 := base64.RawURLEncoding.EncodeToString([]byte("mock_y_val_must_be_32_bytes_long"))
+// Cryptographic Evaluation
+	kIBytes, _ := base64.RawURLEncoding.DecodeString(kIB64)
+	blindedBytes, _ := base64.RawURLEncoding.DecodeString(req.BlindedB64)
+
+	yBytes, err := crypto.RistrettoScalarMult(kIBytes, blindedBytes)
+	if err != nil {
+		WriteError(w, http.StatusBadRequest, "invalid_crypto_eval", "Crypto evaluation failed", nil)
+		return
+	}
+
+	yB64 := base64.RawURLEncoding.EncodeToString(yBytes)
 
 	resp := model.ToprfEvalResponse{
 		SpID: 1, // Will be injected or fetched from config later

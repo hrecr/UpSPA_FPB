@@ -5,6 +5,7 @@ import (
 	"encoding/base64"
 	"errors"
 	"net/http"
+	"upspa/internal/crypto"
 	"upspa/internal/model"
 )
 
@@ -47,7 +48,7 @@ type CryptoHelper interface {
 type DefaultCryptoHelper struct{}
 
 func (d *DefaultCryptoHelper) VerifyEd25519(sigPk []byte, msg []byte, sig []byte) bool {
-	return true
+	return crypto.VerifyEd25519(sigPk, msg, sig)
 }
 
 // Handler holds the background services needed to run the API.
